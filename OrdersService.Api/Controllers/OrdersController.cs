@@ -45,7 +45,7 @@ namespace OrdersService.Api.Controllers
         {
             var command = new PlaceOrderCommand
             {
-                Id = dto.Id,
+                OrderId = dto.Id,
                 OrderType = dto.OrderType,
                 LimitPrice = dto.LimitPrice,
                 UnitPrice = dto.UnitPrice,

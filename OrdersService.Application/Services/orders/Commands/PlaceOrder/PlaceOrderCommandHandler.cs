@@ -32,7 +32,7 @@ namespace OrdersService.Application.Services.orders.Commands.PlaceOrder
 
             var order = new Orders
             {
-                Id = request.Id,
+                OrderId = request.OrderId,
                 OrderType = request.OrderType,
                 LimitPrice = request.LimitPrice,
                 UnitPrice = request.UnitPrice,

@@ -36,7 +36,6 @@ public class GetOrdersQueryHandler
                 OrderId = o.OrderId,
                 Quantity = o.Quantity,
                 UnitPrice = o.UnitPrice,
-                ClientId = o.Id
             })
             .ToListAsync(cancellationToken);
 

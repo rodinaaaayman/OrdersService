@@ -47,14 +47,13 @@ namespace OrdersService.Application.Services.invoices
 
             var commission = tradeValue * order.CommissionRate;
 
-            var invoice = new Invoice
+            var invoice = new Invoices
             {
                 OrderId = order.OrderId,
-                TradeValue = tradeValue,
+                NetAmount = tradeValue,
                 Commission = commission,
-                Tax = 0m,
-                Total = tradeValue + commission,
-                CreatedDate = DateTime.UtcNow
+                GrossAmount = tradeValue + commission,
+                InvoiceDate = DateTime.UtcNow
             };
 
 

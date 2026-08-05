@@ -18,14 +18,14 @@ namespace OrdersService.Api.Controllers
 
         // GET: api/Invoices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoices()
+        public async Task<ActionResult<IEnumerable<Invoices>>> GetInvoices()
         {
             return await _context.Invoices.ToListAsync();
         }
 
         // GET: api/Invoices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Invoice>> GetInvoice(int id)
+        public async Task<ActionResult<Invoices>> GetInvoice(int id)
         {
             var invoice = await _context.Invoices.FindAsync(id);
 

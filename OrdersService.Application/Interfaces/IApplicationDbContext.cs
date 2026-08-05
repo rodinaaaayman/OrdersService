@@ -9,7 +9,7 @@ namespace OrdersService.Application.Interfaces
     {
         DbSet<Orders> Orders { get; }
         DbSet <Executions> Executions { get; }
-        DbSet<Invoice> Invoices { get; }
+        DbSet<Invoices> Invoices { get; }
         DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(

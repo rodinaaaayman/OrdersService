@@ -6,7 +6,7 @@ namespace OrdersService.Application.Services.orders.Commands.PlaceOrder;
 
 public class PlaceOrderCommand : IRequest<Orders>
 {
-    public int Id { get; set; }
+    public int OrderId { get; set; }
 
     public OrderTypes OrderType { get; set; }
 
