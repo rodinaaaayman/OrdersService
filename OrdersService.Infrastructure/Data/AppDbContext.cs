@@ -11,6 +11,7 @@ namespace OrdersService.Infrastructure.Data
         public DbSet<Orders> Orders { get; set; }
         public DbSet<Executions> Executions { get; set; }
         public DbSet<Invoices> Invoices { get; set; }
+        public DbSet<OutboxMessage> OutboxMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

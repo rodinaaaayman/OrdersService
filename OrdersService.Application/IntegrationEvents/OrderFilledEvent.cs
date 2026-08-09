@@ -2,6 +2,7 @@
 {
     public class OrderFilledEvent
     {
+        public int InvoiceId { get; set; }
         public int OrderId { get; set; }
         public int Id { get; set; }
         public int Quantity { get; set; }
@@ -12,3 +13,4 @@
         public DateTime FilledAtUtc { get; set; }
     }
 }
+

@@ -10,6 +10,7 @@ namespace OrdersService.Application.Interfaces
         DbSet<Orders> Orders { get; }
         DbSet <Executions> Executions { get; }
         DbSet<Invoices> Invoices { get; }
+        DbSet<OutboxMessage> OutboxMessages { get; }
         DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(
