@@ -1,10 +1,11 @@
-﻿using OrdersService.Application.Services.orders.Commands.PlaceOrder;
-using OrdersService.Application.Services.orders.Commands.CancelOrder;
-using OrdersService.Application.Services.orders.Queries.GetOrders;
-using OrdersService.Application.DTOs;
-using OrdersService.Domain.Models;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OrdersService.Application.DTOs;
+using OrdersService.Application.Services.orders.Commands.CancelOrder;
+using OrdersService.Application.Services.orders.Commands.PlaceOrder;
+using OrdersService.Application.Services.orders.Queries.GetClientOrders;
+using OrdersService.Application.Services.orders.Queries.GetOrders;
+using OrdersService.Domain.Models;
 
 
 namespace OrdersService.Api.Controllers
@@ -23,8 +24,8 @@ namespace OrdersService.Api.Controllers
         // GET: api/Orders
         [HttpGet]
         public async Task<IActionResult> GetOrders(
-    [FromQuery] int? cursor,
-    [FromQuery] int limit = 20)
+            [FromQuery] int? cursor,
+            [FromQuery] int limit = 20)
         {
             return Ok(await _mediator.Send(new GetOrdersQuery(cursor, limit)));
         }
@@ -39,7 +40,6 @@ namespace OrdersService.Api.Controllers
         }
 
         //POST: api/Orders
-        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<IActionResult> PostOrder(CreateOrdersDTO dto)
         {
@@ -74,6 +74,13 @@ namespace OrdersService.Api.Controllers
 
 
             return NoContent();
+        }
+        // GET: api/Orders/client/5
+        [HttpGet("client/{Id}/orders")]
+        public async Task<IActionResult> GetClientOrders(int Id)
+        {
+            var result = await _mediator.Send(new GetClientOrdersQuery(Id));
+            return Ok(result);
         }
     }
 }

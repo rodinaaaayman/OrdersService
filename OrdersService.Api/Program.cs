@@ -1,14 +1,16 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using OrdersService.Api.ExceptionHandlers;
+using OrdersService.Application.Abstractions;
 using OrdersService.Application.Behaviors;
 using OrdersService.Application.FluentValidation;
 using OrdersService.Application.Interfaces;
-using OrdersService.Application.Services.orders.Commands.PlaceOrder;
+using OrdersService.Application.Services.orders;
 using OrdersService.Application.Services.orders.Commands.CancelOrder;
-using OrdersService.Api.ExceptionHandlers;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
+using OrdersService.Application.Services.orders.Commands.PlaceOrder;
 using OrdersService.Infrastructure.Data;
-using OrdersService.Application.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +40,21 @@ builder.Services.AddMediatR(cfg =>
     cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
 });
 builder.Services.AddSingleton<IClientVerificationService, RabbitMqClientVerificationService>();
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<OrderFilledConsumer>();
 
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("admin");
+            h.Password("admin123");
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 var app = builder.Build();
 app.UseExceptionHandler();
 
