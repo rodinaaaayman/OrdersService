@@ -45,18 +45,18 @@ namespace OrdersService.Api.Controllers
         {
             var command = new PlaceOrderCommand
             {
-                OrderId = dto.Id,
+                Id = dto.Id,
                 OrderType = dto.OrderType,
                 LimitPrice = dto.LimitPrice,
                 UnitPrice = dto.UnitPrice,
                 Quantity = dto.Quantity
             };
 
-            var order = await _mediator.Send(command);
+            var orderId = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetOrders),
-                new { id = order.OrderId },
-                order);
+                new { id = orderId },
+                new { id = orderId });
         }
 
         // DELETE: api/Orders/5

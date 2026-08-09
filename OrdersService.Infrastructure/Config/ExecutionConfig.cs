@@ -13,6 +13,7 @@ public class ExecutionConfig : IEntityTypeConfiguration<Executions>
 
         builder.Property(u => u.ExecutionQuantity)
             .IsRequired();
+
         
     }
 }

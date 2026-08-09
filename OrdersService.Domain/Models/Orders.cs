@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using OrdersService.Domain.Enums;
  
@@ -8,10 +7,9 @@ namespace OrdersService.Domain.Models
 {
     public class Orders
     {
+        [Key]
         public int OrderId { get; set; }
-
-        //[ForeignKey("Client")]
-        //public int Id { get; set; }
+        public int Id { get; set; }
         public OrderTypes OrderType { get; set; } = OrderTypes.Market;
         
         public decimal LimitPrice { get; set; }

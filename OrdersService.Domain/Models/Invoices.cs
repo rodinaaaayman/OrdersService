@@ -6,6 +6,7 @@ namespace OrdersService.Domain.Models
 {
     public class Invoices
     {
+        [Key]
         public int InvoiceId { get; set; }
         public int OrderId { get; set; }
         [JsonIgnore]

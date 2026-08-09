@@ -1,53 +1,43 @@
-﻿using OrdersService.Application.Interfaces;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using OrdersService.Application.Interfaces;
 using OrdersService.Domain.Models;
+using OrdersService.Application.Services.orders.Commands.PlaceOrder;
+namespace OrdersService.Application.Abstractions;
 
-namespace OrdersService.Application.Services.orders.Commands.PlaceOrder
+public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, int>
 {
+    private readonly IApplicationDbContext _context;
+    private readonly IClientVerificationService _clientVerification;
 
-
-    public class PlaceOrderCommandHandler
-        : IRequestHandler<PlaceOrderCommand, Orders>
+    public PlaceOrderCommandHandler(IApplicationDbContext context, IClientVerificationService clientVerification)
     {
-        
-        private readonly IApplicationDbContext _context;
+        _context = context;
+        _clientVerification = clientVerification;
+    }
 
-        public PlaceOrderCommandHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-        public async Task<Orders> Handle(
-            PlaceOrderCommand request,
-            CancellationToken cancellationToken)
-        {
-        //    // Logic goes here
-        //    var client = await _context.Clients
-        //.FirstOrDefaultAsync(c => c.Id == request.Id && c.IsActive);
-        //    if (client == null)
-        //    {
-        //        throw new KeyNotFoundException("Invalid client.");
-        //    }
-            
+    public async Task<int> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+    {
+        var status = await _clientVerification.GetClientStatusAsync(request.Id, cancellationToken);
 
-            var order = new Orders
-            {
-                OrderId = request.OrderId,
-                OrderType = request.OrderType,
-                LimitPrice = request.LimitPrice,
-                UnitPrice = request.UnitPrice,
-                Quantity = request.Quantity
-                
-            };
-            //if (client.AccountBalance < order.GrossAmount)
-            //{
-            //    throw new InvalidOperationException("Insufficient balance.");
-         
-            //}
-            //client.AccountBalance -= order.GrossAmount;
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync(CancellationToken.None);
-            return order;
-        }
+        if (!status.Exists)
+            throw new InvalidOperationException($"Client {request.Id} does not exist.");
+
+        if (!status.IsActive)
+            throw new InvalidOperationException($"Client {request.Id} is not active.");
+
+        var order = new Orders
+        {
+            Id = request.Id,
+            OrderId = request.OrderId,
+            OrderType = request.OrderType,
+            LimitPrice = request.LimitPrice,
+            UnitPrice = request.UnitPrice,
+            Quantity = request.Quantity
+        };
+
+        _context.Orders.Add(order);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return order.OrderId;
     }
 }

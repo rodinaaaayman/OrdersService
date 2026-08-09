@@ -31,8 +31,6 @@ namespace OrdersService.Application.Services.invoices
             if (order == null)
                 return;
 
-
-            // prevent duplicate invoices
             var exists = await _context.Invoices
                 .AnyAsync(
                     i => i.OrderId == order.OrderId,

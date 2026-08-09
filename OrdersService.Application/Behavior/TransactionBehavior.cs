@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using OrdersService.Application.Interfaces;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace OrdersService.Application.Behaviors;
 

@@ -7,6 +7,6 @@
         public decimal UnitPrice { get; set; }
         public decimal Quantity { get; set; }
 
-        public int ClientId { get; set; }
+        public int Id { get; set; }
     }
 }

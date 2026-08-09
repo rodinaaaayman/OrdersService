@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace OrdersService.Domain.Models
 {
     public class Executions
     {
+        [Key]
         public int ExecutionId { get; set; }
         public int OrderId { get; set; }
         [JsonIgnore]
