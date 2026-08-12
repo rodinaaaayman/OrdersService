@@ -25,19 +25,14 @@ namespace OrdersService.Application.Services.orders
 
             if (order == null) return;
 
-            var tradeValue = order.Quantity * order.UnitPrice;
-            var commission = tradeValue * order.CommissionRate;
-
             await _publishEndpoint.Publish(new OrderFilledEvent
             {
                 OrderId = order.OrderId,
                 Id = order.Id,
                 Quantity = order.Quantity,
                 UnitPrice = order.UnitPrice,
-                NetAmount = tradeValue,
-                Commission = commission,
-                GrossAmount = tradeValue + commission,
-                FilledAtUtc = DateTime.UtcNow
+                GrossAmount = order.GrossAmount,
+                InvoiceDate = DateTime.UtcNow
             }, cancellationToken);
         }
     }

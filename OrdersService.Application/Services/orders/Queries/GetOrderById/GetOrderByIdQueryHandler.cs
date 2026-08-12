@@ -13,7 +13,6 @@ public class GetOrderByIdQueryHandler
         _context = context;
     }
 
-
     public async Task<Orders> Handle(
         GetOrderByIdQuery request,
         CancellationToken cancellationToken)

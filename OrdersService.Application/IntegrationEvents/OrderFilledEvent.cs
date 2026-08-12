@@ -10,7 +10,7 @@
         public decimal NetAmount { get; set; }
         public decimal Commission { get; set; }
         public decimal GrossAmount { get; set; }
-        public DateTime FilledAtUtc { get; set; }
+        public DateTime InvoiceDate { get; set; }
     }
 }
 

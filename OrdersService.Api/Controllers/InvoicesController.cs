@@ -15,19 +15,16 @@ namespace OrdersService.Api.Controllers
         {
             _context = context;
         }
-
-        // GET: api/Invoices
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Invoices>>> GetInvoices()
         {
             return await _context.Invoices.ToListAsync();
         }
 
-        // GET: api/Invoices/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Invoices>> GetInvoice(int id)
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<Invoices>> GetInvoice(int Id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
+            var invoice = await _context.Invoices.FindAsync(Id);
 
             if (invoice == null)
             {
@@ -37,11 +34,10 @@ namespace OrdersService.Api.Controllers
             return invoice;
         }
 
-        // DELETE: api/Invoices/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInvoice(int id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteInvoice(int Id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
+            var invoice = await _context.Invoices.FindAsync(Id);
             if (invoice == null)
             {
                 return NotFound();
@@ -53,9 +49,9 @@ namespace OrdersService.Api.Controllers
             return NoContent();
         }
 
-        private bool InvoiceExists(int id)
+        private bool InvoiceExists(int Id)
         {
-            return _context.Invoices.Any(e => e.InvoiceId == id);
+            return _context.Invoices.Any(e => e.InvoiceId == Id);
         }
     }
 }

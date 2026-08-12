@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace OrdersService.Application.Services.orders.Queries.GetOrders;
-
 public class GetOrdersQueryHandler
     : IRequestHandler<GetOrdersQuery, List <OrdersDTO>>
 {
@@ -14,8 +13,6 @@ public class GetOrdersQueryHandler
     {
         _context = context;
     }
-
-
     public async Task<List<OrdersDTO>> Handle(
     GetOrdersQuery request,
     CancellationToken cancellationToken)
@@ -36,6 +33,7 @@ public class GetOrdersQueryHandler
                 OrderId = o.OrderId,
                 Quantity = o.Quantity,
                 UnitPrice = o.UnitPrice,
+                Id = o.Id
             })
             .ToListAsync(cancellationToken);
 

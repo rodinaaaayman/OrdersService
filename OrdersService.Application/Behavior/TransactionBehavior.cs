@@ -8,7 +8,6 @@ public class TransactionBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     private readonly IApplicationDbContext _context;
-
     public TransactionBehavior(IApplicationDbContext context)
     {
         _context = context;

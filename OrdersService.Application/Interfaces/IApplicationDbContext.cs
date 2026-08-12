@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-
 namespace OrdersService.Application.Interfaces
 {
     public interface IApplicationDbContext

@@ -73,7 +73,7 @@ public class RabbitMqClientVerificationService : IClientVerificationService, IAs
         return Task.CompletedTask;
     }
 
-    public async Task<ClientStatusResponse> GetClientStatusAsync(int Id, CancellationToken ct = default)
+    public async Task<ClientStatusResponse> GetClientStatusAsync(int Id, decimal grossamount, CancellationToken ct = default)
     {
         await EnsureInitializedAsync();
 
@@ -81,7 +81,7 @@ public class RabbitMqClientVerificationService : IClientVerificationService, IAs
         var tcs = new TaskCompletionSource<ClientStatusResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
         _pendingRequests[correlationId] = tcs;
 
-        var json = JsonSerializer.Serialize(new ClientStatusRequest { Id = Id });
+        var json = JsonSerializer.Serialize(new ClientStatusRequest { Id = Id, Amount = grossamount });
         var body = Encoding.UTF8.GetBytes(json);
 
         var props = new BasicProperties
@@ -102,7 +102,7 @@ public class RabbitMqClientVerificationService : IClientVerificationService, IAs
         if (completedTask != tcs.Task)
         {
             _pendingRequests.TryRemove(correlationId, out _);
-            throw new TimeoutException($"AuthUserService did not respond within 5 seconds for client {Id}.");
+            throw new TimeoutException($"AuthUserService dId not respond within 5 seconds for client {Id}.");
         }
 
         return await tcs.Task;

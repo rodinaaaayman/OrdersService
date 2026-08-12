@@ -40,7 +40,7 @@ public class FillOrderCommandHandler : IRequestHandler<FillOrderCommand>
             NetAmount = order.NetAmount,
             Commission = order.Commission,
             GrossAmount = order.GrossAmount,
-            FilledAtUtc = DateTime.UtcNow
+            InvoiceDate = DateTime.UtcNow
         };
 
         _context.OutboxMessages.Add(new OutboxMessage

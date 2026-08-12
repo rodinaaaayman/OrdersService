@@ -2,7 +2,6 @@
 using FluentValidation;
 using OrdersService.Domain.Enums;
 
-
 namespace OrdersService.Application.FluentValidation
 {
     public class OrdersFluentValidation

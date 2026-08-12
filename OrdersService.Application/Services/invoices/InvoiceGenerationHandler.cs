@@ -3,21 +3,17 @@ using OrdersService.Application.Interfaces;
 using OrdersService.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+
 namespace OrdersService.Application.Services.invoices
 {
-    
-
     public class InvoiceGenerationHandler
         : INotificationHandler<OrderFullyFilledEvent>
     {
         private readonly IApplicationDbContext _context;
-
         public InvoiceGenerationHandler(IApplicationDbContext context)
         {
             _context = context;
         }
-
-
         public async Task Handle(
             OrderFullyFilledEvent notification,
             CancellationToken cancellationToken)
@@ -26,8 +22,6 @@ namespace OrdersService.Application.Services.invoices
                 .FirstOrDefaultAsync(
                     o => o.OrderId == notification.OrderId,
                     cancellationToken);
-
-
             if (order == null)
                 return;
 
@@ -35,22 +29,16 @@ namespace OrdersService.Application.Services.invoices
                 .AnyAsync(
                     i => i.OrderId == order.OrderId,
                     cancellationToken);
-
-
             if (exists)
                 return;
-
-
-            var tradeValue = order.Quantity * order.UnitPrice;
-
-            var commission = tradeValue * order.CommissionRate;
-
+            var NetAmount = order.Quantity * order.UnitPrice;
+            var commission = NetAmount * order.CommissionRate;
             var invoice = new Invoices
             {
                 OrderId = order.OrderId,
-                NetAmount = tradeValue,
+                NetAmount = NetAmount,
                 Commission = commission,
-                GrossAmount = tradeValue + commission,
+                GrossAmount = NetAmount + commission,
                 InvoiceDate = DateTime.UtcNow
             };
 

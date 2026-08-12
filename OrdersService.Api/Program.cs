@@ -15,12 +15,13 @@ using OrdersService.Infrastructure.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>();
 builder.Services.AddValidatorsFromAssemblyContaining<OrdersFluentValidation>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IApplicationDbContext>(provider =>
@@ -56,6 +57,10 @@ builder.Services.AddMassTransit(x =>
     });
 });
 var app = builder.Build();
+//app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+//{
+//    Predicate = _ => true
+//});
 app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
@@ -63,16 +68,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-;
-
+};
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-
 
 app.Run();
 public partial class Program { }

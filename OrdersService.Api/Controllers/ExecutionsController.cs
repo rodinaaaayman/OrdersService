@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrdersService.Domain.Enums;
+
 namespace OrdersService.Api.Controllers
 {
     [ApiController]
@@ -22,6 +23,7 @@ namespace OrdersService.Api.Controllers
             _context = context;
             _mediator = mediator;
         }
+
         [HttpPost]
         public async Task<IActionResult> PostExecution(CreateExecutionDTO dto)
         {
@@ -31,17 +33,12 @@ namespace OrdersService.Api.Controllers
             if (order == null)
                 return NotFound("Order not found.");
 
-
-            // overfilling check
             if (order.FilledQuantity + dto.ExecutionQuantity > order.Quantity)
             {
                 return UnprocessableEntity(
                     "Execution exceeds remaining quantity."
                 );
             }
-
-
-            // Create execution
             var execution = new Executions
             {
                 OrderId = dto.OrderId,
@@ -50,13 +47,7 @@ namespace OrdersService.Api.Controllers
             };
 
             _context.Executions.Add(execution);
-
-
-            // Update filled quantity
             order.FilledQuantity += dto.ExecutionQuantity;
-
-
-            // If completely filled
             
                 if (order.FilledQuantity == order.Quantity)
                 {
@@ -70,12 +61,7 @@ namespace OrdersService.Api.Controllers
             {
                 order.Status = OrderStatus.PartiallyFilled;
             }
-
-
             await _context.SaveChangesAsync();
-
-
-            // Avoid circular reference problem
             return Ok(new
             {
                 execution.ExecutionId,

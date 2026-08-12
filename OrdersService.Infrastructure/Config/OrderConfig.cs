@@ -17,15 +17,6 @@ public class OrderConfig: IEntityTypeConfiguration<Orders>
         builder.Property(u => u.Quantity)
             .IsRequired();
 
-        builder.Property(o => o.NetAmount)
-                .HasComputedColumnSql("[Quantity] * [UnitPrice]", stored: true);
-
-        builder.Property(o => o.Commission)
-            .HasComputedColumnSql("([Quantity] * [UnitPrice]) * [CommissionRate] / 100", stored: true);
-
-        builder.Property(o => o.GrossAmount)
-            .HasComputedColumnSql("([Quantity] * [UnitPrice]) + (([Quantity] * [UnitPrice]) * [CommissionRate] / 100)", stored: true);
-
         builder.HasOne(o => o.Invoice)
             .WithOne(i => i.Order)
             .HasForeignKey<Invoices>(i => i.OrderId);

@@ -7,7 +7,6 @@ using OrdersService.Application.Services.orders.Queries.GetClientOrders;
 using OrdersService.Application.Services.orders.Queries.GetOrders;
 using OrdersService.Domain.Models;
 
-
 namespace OrdersService.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -21,7 +20,6 @@ namespace OrdersService.Api.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/Orders
         [HttpGet]
         public async Task<IActionResult> GetOrders(
             [FromQuery] int? cursor,
@@ -29,17 +27,16 @@ namespace OrdersService.Api.Controllers
         {
             return Ok(await _mediator.Send(new GetOrdersQuery(cursor, limit)));
         }
-        // GET: api/Orders/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Orders>> GetOrders(int id)
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<Orders>> GetOrders(int Id)
         {
             var order = await _mediator.Send(
-                new GetOrderByIdQuery(id));
+                new GetOrderByIdQuery(Id));
 
             return Ok(order);
         }
 
-        //POST: api/Orders
         [HttpPost]
         public async Task<IActionResult> PostOrder(CreateOrdersDTO dto)
         {
@@ -49,22 +46,21 @@ namespace OrdersService.Api.Controllers
                 OrderType = dto.OrderType,
                 LimitPrice = dto.LimitPrice,
                 UnitPrice = dto.UnitPrice,
-                Quantity = dto.Quantity
+                Quantity = dto.Quantity,
+                    GrossAmount = dto.GrossAmount
             };
 
             var orderId = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetOrders),
-                new { id = orderId },
-                new { id = orderId });
+                new { Id = orderId });
         }
 
-        // DELETE: api/Orders/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrders(int id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteOrders(int Id)
         {
             var result = await _mediator.Send(
-                new CancelOrderCommand(id));
+                new CancelOrderCommand(Id));
 
 
             if (!result)
@@ -75,7 +71,7 @@ namespace OrdersService.Api.Controllers
 
             return NoContent();
         }
-        // GET: api/Orders/client/5
+        // GET "orders by client Id"
         [HttpGet("client/{Id}/orders")]
         public async Task<IActionResult> GetClientOrders(int Id)
         {
