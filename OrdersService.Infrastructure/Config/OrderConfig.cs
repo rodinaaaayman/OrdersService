@@ -28,6 +28,10 @@ public class OrderConfig: IEntityTypeConfiguration<Orders>
 
         builder.Property(o => o.CommissionRate)
         .HasColumnType("decimal(5,4)");
+
+        builder.Property(o => o.Status)
+            .HasConversion<string>()
+            .HasMaxLength(20);
     }
 }
 

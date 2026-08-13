@@ -6,7 +6,7 @@ using OrdersService.Domain.Enums;
 namespace OrdersService.Application.Services.orders.Commands.CancelOrder;
 
 public class CancelOrderCommandHandler
-    : IRequestHandler<CancelOrderCommand, bool>
+    : IRequestHandler<CancelOrderCommand, CancelOrderResult>
 {
     private readonly IApplicationDbContext _context;
 
@@ -15,8 +15,7 @@ public class CancelOrderCommandHandler
         _context = context;
     }
 
-
-    public async Task<bool> Handle(
+    public async Task<CancelOrderResult> Handle(
         CancelOrderCommand request,
         CancellationToken cancellationToken)
     {
@@ -25,21 +24,30 @@ public class CancelOrderCommandHandler
                 o => o.OrderId == request.OrderId,
                 cancellationToken);
 
-
         if (order == null)
         {
-            return false;
-        }
-        if (order.Status == OrderStatus.Filled) {
-            return false;
+            return new CancelOrderResult { Success = false, Message = "Order not found." };
         }
 
-
-        _context.Orders.Remove(order);
-
+        if (order.Status == OrderStatus.Filled)
+        {
+            return new CancelOrderResult
+            {
+                Success = false,
+                Message = "This order is already filled and cannot be deleted."
+            };
+        }
+        if (order.Status == OrderStatus.Cancelled)
+        {
+            return new CancelOrderResult
+            {
+                Success = false,
+                Message = "This order is already cancelled."
+            };
+        }
+        order.Status = OrderStatus.Cancelled;
         await _context.SaveChangesAsync(cancellationToken);
 
-
-        return true;
+        return new CancelOrderResult { Success = true };
     }
 }

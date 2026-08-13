@@ -56,18 +56,13 @@ namespace OrdersService.Api.Controllers
                 new { Id = orderId });
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteOrders(int Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> CancelOrder(int id)
         {
-            var result = await _mediator.Send(
-                new CancelOrderCommand(Id));
+            var result = await _mediator.Send(new CancelOrderCommand { OrderId = id });
 
-
-            if (!result)
-            {
-                return NotFound();
-            }
-
+            if (!result.Success)
+                return BadRequest(result.Message);
 
             return NoContent();
         }

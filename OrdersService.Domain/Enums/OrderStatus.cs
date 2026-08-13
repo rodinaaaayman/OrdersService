@@ -5,6 +5,6 @@
         Pending,
         PartiallyFilled,
         Filled,
-        Canceled
+        Cancelled
     }
 }
