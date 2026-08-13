@@ -33,6 +33,13 @@ namespace OrdersService.Api.Controllers
             if (order == null)
                 return NotFound("Order not found.");
 
+            if (order.OrderType == OrderTypes.Limit && order.UnitPrice > order.LimitPrice)
+            {
+                return UnprocessableEntity(
+                    "The unit price exceeds limit price."
+                );  
+            }
+
             if (order.FilledQuantity + dto.ExecutionQuantity > order.Quantity)
             {
                 return UnprocessableEntity(
@@ -49,14 +56,14 @@ namespace OrdersService.Api.Controllers
             _context.Executions.Add(execution);
             order.FilledQuantity += dto.ExecutionQuantity;
             
-                if (order.FilledQuantity == order.Quantity)
-                {
-                    order.Status = OrderStatus.Filled;
+            if (order.FilledQuantity == order.Quantity)
+            {
+                order.Status = OrderStatus.Filled;
 
-                    await _mediator.Publish(
-                        new OrderFullyFilledEvent(order.OrderId)
-                    );
-                }
+                await _mediator.Publish(
+                    new OrderFullyFilledEvent(order.OrderId)
+                );
+            }
             else
             {
                 order.Status = OrderStatus.PartiallyFilled;
@@ -68,7 +75,7 @@ namespace OrdersService.Api.Controllers
                 execution.OrderId,
                 execution.ExecutionQuantity,
                 execution.ExecutionDate,
-                OrderStatus = order.Status
+                OrderStatus = order.Status.ToString()
             });
         }
     }

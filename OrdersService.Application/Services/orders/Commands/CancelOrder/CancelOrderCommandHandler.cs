@@ -37,6 +37,14 @@ public class CancelOrderCommandHandler
                 Message = "This order is already filled and cannot be deleted."
             };
         }
+        if (order.Status == OrderStatus.PartiallyFilled)
+        {
+            return new CancelOrderResult
+            {
+                Success = false,
+                Message = "This order is already partially filled and cannot be deleted."
+            };
+        }
         if (order.Status == OrderStatus.Cancelled)
         {
             return new CancelOrderResult

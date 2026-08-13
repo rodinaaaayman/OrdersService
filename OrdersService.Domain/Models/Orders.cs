@@ -34,6 +34,7 @@ namespace OrdersService.Domain.Models
         {
             if (unitPrice <= 0) throw new ArgumentException("Unit price must be positive.");
             if (quantity <= 0) throw new ArgumentException("Quantity must be more than 0.");
+            if (commissionRate == 0) commissionRate = 0.005m;
 
             var netAmount = quantity * unitPrice;
             var commission = netAmount * commissionRate;
