@@ -47,7 +47,7 @@ namespace OrdersService.Api.Controllers
                 LimitPrice = dto.LimitPrice,
                 UnitPrice = dto.UnitPrice,
                 Quantity = dto.Quantity,
-                    GrossAmount = dto.GrossAmount
+                CommissionRate=dto.CommissionRate
             };
 
             var orderId = await _mediator.Send(command);

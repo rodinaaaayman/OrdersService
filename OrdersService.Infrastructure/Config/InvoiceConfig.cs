@@ -10,6 +10,9 @@ public class InvoiceConfig : IEntityTypeConfiguration<Invoices>
 
         builder.Property(u => u.InvoiceId)
             .ValueGeneratedOnAdd();
+
+        //builder.Property(u => u.CommissionRate)
+            //.HasPrecision(18, 4);
     }
 }
 

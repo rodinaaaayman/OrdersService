@@ -8,6 +8,6 @@ namespace OrdersService.Application.DTOs;
         public decimal LimitPrice { get; set; }
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
-        public decimal GrossAmount { get; set; }
+        public decimal CommissionRate { get; set; } = 0.005m;
     }
 

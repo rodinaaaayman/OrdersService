@@ -13,6 +13,7 @@ namespace OrdersService.Domain.Models
         public Orders Order { get; set; } = null!;
         public decimal NetAmount { get; set; }
         public decimal Commission { get; set; }
+        //public decimal CommissionRate { get; set; } = 0.005m;
         public decimal GrossAmount { get; set; }
         public DateTime InvoiceDate { get; set; } = DateTime.Now;
     }

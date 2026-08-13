@@ -18,14 +18,19 @@ namespace OrdersService.Domain.Models
         public decimal NetAmount { get; private set; }
         public decimal Commission { get; private set; }
         public decimal GrossAmount { get; private set; }
-        public decimal CommissionRate { get; set; } = 0.005m;
+        private decimal _commissionRate = 0.005m;
+        public decimal CommissionRate
+        {
+            get => _commissionRate;
+            set => _commissionRate = (value == 0) ? 0.005m : value;
+        }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public ICollection<Executions> Executions { get; set; } = new List<Executions>();
         [JsonIgnore]
         public Invoices? Invoice { get; set; }
         private Orders() { }
 
-        public static Orders Create(int clientId, OrderTypes orderType, decimal limitPrice, decimal unitPrice, int quantity, decimal commissionRate = 0.005m)
+        public static Orders Create(int clientId, OrderTypes orderType, decimal limitPrice, decimal unitPrice, int quantity, decimal commissionRate)
         {
             if (unitPrice <= 0) throw new ArgumentException("Unit price must be positive.");
             if (quantity <= 0) throw new ArgumentException("Quantity must be more than 0.");
@@ -41,10 +46,10 @@ namespace OrdersService.Domain.Models
                 LimitPrice = limitPrice,
                 UnitPrice = unitPrice,
                 Quantity = quantity,
-                CommissionRate = commissionRate,
                 NetAmount = netAmount,
                 Commission = commission,
-                GrossAmount = grossAmount
+                GrossAmount = grossAmount,
+                CommissionRate = commissionRate
             };
         }
     }

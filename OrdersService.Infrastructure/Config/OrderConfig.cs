@@ -1,6 +1,7 @@
-﻿using OrdersService.Domain.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using OrdersService.Domain.Models;
+using System.Reflection.Emit;
 
 public class OrderConfig: IEntityTypeConfiguration<Orders>
 {
@@ -24,6 +25,9 @@ public class OrderConfig: IEntityTypeConfiguration<Orders>
         builder.HasMany(o => o.Executions)
             .WithOne(e => e.Order)
             .HasForeignKey(e => e.OrderId);
+
+        builder.Property(o => o.CommissionRate)
+        .HasColumnType("decimal(5,4)");
     }
 }
 

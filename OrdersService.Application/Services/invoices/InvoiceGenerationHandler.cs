@@ -32,12 +32,14 @@ namespace OrdersService.Application.Services.invoices
             if (exists)
                 return;
             var NetAmount = order.Quantity * order.UnitPrice;
-            var commission = NetAmount * order.CommissionRate;
+            //var commission = NetAmount * order.CommissionRate;
+            var commission = NetAmount * 0.005m;
             var invoice = new Invoices
             {
                 OrderId = order.OrderId,
                 NetAmount = NetAmount,
                 Commission = commission,
+                //CommissionRate = 0.005m,
                 GrossAmount = NetAmount + commission,
                 InvoiceDate = DateTime.UtcNow
             };
